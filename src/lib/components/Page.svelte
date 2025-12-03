@@ -8,7 +8,7 @@
         textboxBackgroundColor?: string
         color: string
         title: string
-        body: string
+        body: Snippet
         inputs?: Snippet<[string, string?]>
         buttons?: Snippet<[string, string]>
     }
@@ -33,7 +33,7 @@
         {title}
     </Header>
     <div class="body" style:--color={color}>
-        {body}
+        {@render body()}
     </div>
     <div class="inputs">
         {#if inputs}
@@ -53,7 +53,9 @@
         font-family: 'Roboto', sans-serif;
         font-size: 18px;
         text-align: center;
-        margin: auto 0
+        margin-bottom: auto;
+        margin-top: 4em;
+        padding: 0 4em;
     }
 
     .inputs, .buttons {
