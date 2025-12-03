@@ -1,11 +1,19 @@
 <script lang="ts">
-    let { backgroundColor, color, ...args } = $props()
+    type TextboxProps = {
+        backgroundColor: string
+        color: string
+        width?: string
+        [key: string]: any
+    }
+
+    let { backgroundColor, color, width="100%", ...args }: TextboxProps = $props()
 </script>
 
 <input 
     { ...args }
     style:--backgroundColor={backgroundColor}
     style:--color={color}
+    style:--width={width}
     type="text" 
 />
 
@@ -20,6 +28,7 @@
         transition: background-color 0.15s ease;
         font-family: 'Roboto', sans-serif;
         font-size: 14px;
+        width: var(--width);
 
         &:focus {
             outline: none;
