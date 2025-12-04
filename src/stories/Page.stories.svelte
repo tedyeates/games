@@ -14,6 +14,8 @@
         component: Page,
         tags: ['autodocs'],
         argTypes: {
+            backgroundColor: {control: "color"},
+            color: {control: "color"},
         },
         args: {
             backgroundColor: "#111111",
@@ -27,8 +29,8 @@
 <Story 
     name="Home Page" 
     args={{
-        backgroundColor: "#111111",
-        color: "#ffffff"
+        backgroundColor: "#202126",
+        color: "#EDD7D7"
     }}
 >
     {#snippet template(args)}

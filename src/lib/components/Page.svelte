@@ -26,8 +26,8 @@
 
 <Panel 
     {backgroundColor}
-    width="50vw"
-    height="90vh"
+    width="45vw"
+    height="97vh"
 >
     <Header {color}>
         {title}
