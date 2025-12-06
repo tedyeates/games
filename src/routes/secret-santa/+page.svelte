@@ -4,7 +4,11 @@
 	import { goto } from "$app/navigation";
     import { styles } from "$lib/style/themes"
 
+    let loading = $state(false)
+    let joinLoading = $state(false)
+
     async function createRoom() {
+        loading = true
         const response = await fetch("/api/room/create", {
             method: "POST"
         })
@@ -12,6 +16,13 @@
         if (data.success) {
             goto(`/secret-santa/room/${data.room.roomCode}/player/create`)
         }
+        loading = false
+    }
+
+    async function joinRoom() {
+        joinLoading = true
+        goto("/secret-santa/room/join")
+        joinLoading = false
     }
 
 </script>
@@ -29,13 +40,15 @@
             label="Join Room"
             backgroundColor={backgroundColor}
             color={color}
-            onclick={() => goto("/secret-santa/room/join")}
+            onclick={joinRoom}
+            loading={joinLoading}
         />
         <Button
             label="Create Room"
             backgroundColor={backgroundColor}
             color={color}
             onclick={createRoom}
+            {loading}
         />
     {/snippet}
 </Page>

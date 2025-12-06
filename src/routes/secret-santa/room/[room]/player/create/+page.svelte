@@ -4,11 +4,13 @@
     import Button from "$lib/components/Button.svelte";
     import Textbox from "$lib/components/Textbox.svelte";
 	import { goto } from "$app/navigation";
+	import { page } from "$app/state";
 
     let { data } = $props()
     console.log(data)
 
     let playerName = $state("")
+    let error = $state("")
 
     async function createPlayer(room: string) {
         const response = await fetch(`/api/room/${room}/player/create`, {
@@ -17,21 +19,25 @@
                 name: playerName
             })
         })
+
         const data = await response.json()
         if (data.success) {
             goto(`/secret-santa/room/${room}/lobby`)
+        } else {
+            error = data.message
         }
     }
 </script>
 
 <Page
-    backgroundColor={styles.backgroundColor}
-    textboxBackgroundColor={styles.textboxBackgroundColor}
-    color={styles.color}
+    {...styles}
     title="Player Create"
 >
     {#snippet body()}
         <p>Enter player name below</p>
+        {#if error}
+            <p style="color: red;">{error}</p>
+        {/if}
     {/snippet}
     {#snippet inputs(color, textboxBackgroundColor)}
         <Textbox 

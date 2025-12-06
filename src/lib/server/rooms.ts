@@ -17,7 +17,7 @@ export function addPlayer(roomCode: string, name: string) {
     if (!room) throw error(404, "Room not found")
     if (room.players.has(name)) throw error(400, "Name already in use")
 
-    room.players.set(name, {name});
+    room.players.set(name, {name, ready: false});
 }
 
 const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ"; 

@@ -1,14 +1,17 @@
 <script lang="ts">
+    import Icon from "@iconify/svelte";
+
     type ButtonProps = {
         label: string
         backgroundColor: string
         color: string
         onclick: () => void
         width?: string
+        loading?: boolean
         [key: string]: any
     }
 
-    let { label, backgroundColor, color, width="100%", ...args }: ButtonProps = $props()
+    let { label, backgroundColor, color, width="100%", loading=false, ...args }: ButtonProps = $props()
 </script>
 
 <button 
@@ -16,13 +19,22 @@
     style:--backgroundColor={backgroundColor}
     style:--color={color}
     style:--width={width}
+    class:loading
 >
-    {label}
+    {#if loading }
+        <Icon icon="codex:loader" width="40" height="30"  style={`color: ${color}`} />
+    {:else}
+        {label}
+    {/if}
+
 </button>
 
 <style lang="scss">
     button {
-        display: block;
+        display: flex;
+        justify-content: center;   
+        align-items: center; 
+
         padding: 0 1em;
         background-color: var(--backgroundColor);
         color: var(--color);
@@ -39,7 +51,12 @@
         &:hover {
             background-color: color-mix(in srgb, var(--backgroundColor) 90%, white);
         }
+        
+        &.loading {
+            background-color: color-mix(in srgb, var(--backgroundColor) 80%, white);
+        }
     }
+
 
 
 </style>

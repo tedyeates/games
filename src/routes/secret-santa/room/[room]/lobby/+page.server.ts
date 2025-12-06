@@ -1,8 +1,9 @@
+import { getRoom } from "$lib/server/rooms"
 import type { RequestEvent } from "@sveltejs/kit"
 
 export const load = ({ params, cookies }: RequestEvent) => {
     return {
-        room: params.room,
+        room: getRoom(params.room as string),
         player: cookies.get("player")
     }
 }
