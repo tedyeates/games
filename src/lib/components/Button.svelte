@@ -3,6 +3,7 @@
         label: string
         backgroundColor: string
         color: string
+        onclick: () => void
         width?: string
         [key: string]: any
     }
@@ -11,7 +12,7 @@
 </script>
 
 <button 
-    {...args} 
+    {...args}
     style:--backgroundColor={backgroundColor}
     style:--color={color}
     style:--width={width}

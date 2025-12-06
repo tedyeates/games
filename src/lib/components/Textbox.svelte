@@ -3,10 +3,11 @@
         backgroundColor: string
         color: string
         width?: string
+        value?: string
         [key: string]: any
     }
 
-    let { backgroundColor, color, width="100%", ...args }: TextboxProps = $props()
+    let { backgroundColor, color, width="100%", value = $bindable(), ...args }: TextboxProps = $props()
 </script>
 
 <input 
@@ -15,6 +16,7 @@
     style:--color={color}
     style:--width={width}
     type="text" 
+    bind:value
 />
 
 <style lang="scss">

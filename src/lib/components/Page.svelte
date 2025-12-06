@@ -24,28 +24,34 @@
     }: PageProps = $props()
 </script>
 
-<Panel 
-    {backgroundColor}
-    width="45vw"
-    height="97vh"
+
+<div
+    class="container"
+    style:background-color={backgroundColor}
 >
-    <Header {color}>
-        {title}
-    </Header>
-    <div class="body" style:--color={color}>
-        {@render body()}
-    </div>
-    <div class="inputs">
-        {#if inputs}
-            {@render inputs(color, textboxBackgroundColor)}
-        {/if}
-    </div>
-    <div class="buttons">
-        {#if buttons}
-            {@render buttons(color, backgroundColor)}
-        {/if}
-    </div>
-</Panel>
+    <Panel 
+        {backgroundColor}
+        width="45vw"
+        height="97vh"
+    >
+        <Header {color}>
+            {title}
+        </Header>
+        <div class="body inner" style:--color={color}>
+            {@render body()}
+        </div>
+        <div class="inputs inner">
+            {#if inputs && textboxBackgroundColor}
+                {@render inputs(color, textboxBackgroundColor)}
+            {/if}
+        </div>
+        <div class="buttons inner">
+            {#if buttons}
+                {@render buttons(color, backgroundColor)}
+            {/if}
+        </div>
+    </Panel>
+</div>
 
 <style lang="scss">
     .body {
@@ -63,7 +69,7 @@
         justify-content: center;
     }
 
-    div {
+    div.inner {
         padding: 0 2em;
     }
 
@@ -74,6 +80,12 @@
         margin-bottom: 2em;
     }
 
-
+    .container {
+        display: flex;
+        width: 100%;
+        height: 99vh;
+        justify-content: center;
+        padding-top: 1vh;
+    }
 </style>
 

@@ -7,6 +7,7 @@
     import Button from '$lib/components/Button.svelte';
 	import Table from '$lib/components/Table.svelte';
 	import Panel from './Panel.stories.svelte';
+	import { fn } from 'storybook/test';
 
   // More on how to set up stories at: https://storybook.js.org/docs/writing-stories
     const { Story } = defineMeta({
@@ -46,11 +47,13 @@
                     label="Join Room"
                     backgroundColor={backgroundColor}
                     color={color}
+                    onclick={fn()}
                 />
                 <Button
                     label="Create Room"
                     backgroundColor={backgroundColor}
                     color={color}
+                    onclick={fn()}
                 />
             {/snippet}
         </Page>
@@ -81,6 +84,7 @@
                     label="Join Room"
                     backgroundColor={backgroundColor}
                     color={color}
+                    onclick={fn()}
                 />
             {/snippet}
         </Page>
@@ -116,6 +120,7 @@
                     label="Start Game"
                     backgroundColor={backgroundColor}
                     color={color}
+                    onclick={fn()}
                 />
             {/snippet}
         </Page>

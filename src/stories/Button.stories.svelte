@@ -17,4 +17,4 @@
 </script>
 
 <!-- More on writing stories with args: https://storybook.js.org/docs/writing-stories/args -->
-<Story name="Primary" args={{ label: 'Button', backgroundColor: '#111111', color: "#ffffff" }} />
+<Story name="Primary" args={{ label: 'Button', backgroundColor: '#111111', color: "#ffffff", onclick: fn() }} />
