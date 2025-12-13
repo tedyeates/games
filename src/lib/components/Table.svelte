@@ -1,7 +1,16 @@
 <script lang="ts">
+    type Header = {
+        display: string
+        value: string
+    }
+
+    type Body = {
+        [key: string]: string|boolean|number
+    }
+
     type TableProps = {
-        headers: string[]
-        body: object[]
+        headers: Header[]
+        body: Body[]
         backgroundColor: string
         color: string
     }
@@ -16,15 +25,15 @@
     <thead>
         <tr>
             {#each headers as header}
-                <th>{header}</th>
+                <th>{header.display}</th>
             {/each}
         </tr>
     </thead>
     <tbody>
         {#each body as row}
             <tr>
-                {#each Object.entries(row) as [_, value]}
-                    <td>{value}</td>
+                {#each headers as header}
+                    <td>{row[header.value]}</td>
                 {/each}
             </tr>
         {/each}

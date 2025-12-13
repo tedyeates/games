@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client"
+    output = "./generated/prisma"
+}
+
+datasource db {
+    provider = "sqlite"
+}
+
+enum RuleType {
+    easy
+    medium
+    hard
+}
+
+enum RuleCategory {
+    less
+    greater
+    equal
+}
+
+enum RuleRestriction {
+    none
+    odd
+    even
+}
+
+enum DiceLocation {
+    DECK
+    DISCARD
+    HAND
+}
+
+enum Role {
+    UNIONIST
+    ELF
+}
+
+enum Color {
+    RED
+    BLUE
+    GREEN
+    ORANGE
+    ANY
+}
+
+model Player {
+    id              Int         @id @default(autoincrement())
+    name            String?  
+    socketId        String      @unique
+    ready           Boolean     @default(false)
+    role            Role?
+    
+    room            Room?       @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    roomId          Int?
+    isHost          Boolean     @default(false)
+
+    deck            Dice[]
+    totals          Total[]   
+}
+
+model Dice {
+    id          Int       @id @default(autoincrement())
+    sides       Side[]
+    color       Color
+    location    DiceLocation
+    order       Int
+
+    player      Player?     @relation(fields: [playerId], references: [id], onDelete: Cascade)
+    playerId    Int?
+}
+
+model Side {
+    id      Int     @id @default(autoincrement())
+    value   String
+
+    dice    Dice    @relation(fields: [diceId], references: [id], onDelete: Cascade)
+    diceId  Int
+}
+
+model Room {
+    id          Int       @id @default(autoincrement())
+    roomCode    String    @unique
+    players     Player[]
+    rounds      Round[]
+    totals      Total[]
+}
+
+model Round {
+    id       Int      @id @default(autoincrement())
+    room     Room     @relation(fields: [roomId], references: [id])
+    roomId   Int
+    order    Int
+    current  Boolean  @default(false)
+
+    totals   Total[]
+    rules    Rule[]
+}
+
+model Total {
+    id          Int      @id @default(autoincrement())
+    color       Color
+    total       String
+    selected    Boolean
+
+    // Belongs to either a Room or a Round
+    room        Room?    @relation(fields: [roomId], references: [id])
+    roomId      Int?
+
+    round       Round?   @relation(fields: [roundId], references: [id])
+    roundId     Int?
+
+    player      Player?  @relation(fields: [playerId], references: [id])
+    playerId    Int?
+}
+
+model Rule {
+    id          Int      @id @default(autoincrement())
+    type        RuleType   // "easy" | "medium" | "hard"
+    category    RuleCategory   // "less" | "greater" | "equal"
+    restriction RuleRestriction // "none" | "odd" | "even"
+    color       Color
+
+    total       Int
+
+    rounds      Round[]
+}

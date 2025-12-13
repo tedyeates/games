@@ -5,25 +5,29 @@
     import Textbox from "$lib/components/Textbox.svelte";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-
-    let { data } = $props()
-    console.log(data)
+    import { PUBLIC_EXPRESS_BASE } from '$env/static/public';
 
     let playerName = $state("")
     let error = $state("")
 
     async function createPlayer(room: string) {
-        const response = await fetch(`/api/room/${room}/player/create`, {
-            method: "POST",
-            body: JSON.stringify({
-                name: playerName
-            })
-        })
+        const response = await fetch(
+            `${PUBLIC_EXPRESS_BASE}/api/room/${room}/player/create`, 
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({
+                    name: playerName
+                })
+            }
+        )
 
-        const data = await response.json()
-        if (data.success) {
+        console.log(response.status)
+        if (response.status === 201) {
             goto(`/secret-santa/room/${room}/lobby`)
         } else {
+            const data = await response.json()
             error = data.message
         }
     }
@@ -51,7 +55,7 @@
             label="Submit Name"
             backgroundColor={backgroundColor}
             color={color}
-            onclick={() => createPlayer(data.room)}
+            onclick={() => createPlayer(page.params.room as string)}
         />
     {/snippet}
 </Page>

@@ -19,7 +19,7 @@
 <Story 
     name="Player List" 
     args={{ 
-        headers: ["Name", "Ready"], 
+        headers: [{display: "Name", value:"name"}, {display: "Ready", name: "ready"}], 
         body: [
             {name: "Ted", ready: "✅"},
             {name: "Raf", ready: "✅"},

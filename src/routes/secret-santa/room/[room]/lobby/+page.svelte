@@ -2,21 +2,65 @@
     import Page from "$lib/components/Page.svelte";
     import Table from "$lib/components/Table.svelte";
     import Button from "$lib/components/Button.svelte";
-	import type { Player } from "$lib/server/types.js";
 	import { styles } from "$lib/style/themes";
+    import { socket } from "$lib/client/socket";
+    import { goto } from "$app/navigation";
+	import { page } from "$app/state";
+	import type { Player } from "$lib/client/types.js";
+
+    type PlayerDisplay = {
+        name?: string
+        host: string
+        ready: string
+    }
 
     let { data } = $props()
-    console.log(data)
 
-    let players = []
+    function startGame(currentPlayer: any) {
+        
+    }
 
-    function startGame(currentPlayer: Player) {
+    let players: PlayerDisplay[] = $state([])
+
+    function displayPlayers(players: Player[]): PlayerDisplay[] {
+        return players.map((player) => {
+            const host = player.isHost ? "👑" : ""
+            const ready = player.ready ? "✅" : "❌"
+
+            return {
+                name: player.name,
+                host,
+                ready
+            }
+        })
 
     }
 
-    for (const [key, value] of data.room?.players ?? []) {
-        players.push({...value, ready: value.ready ? "✅" : "❌" })
-    }
+    $effect(()=> {
+        const player = JSON.parse(data.player)
+        socket?.on("room-update", (socketData) => {
+            if (page.params.room === socketData.roomCode) {
+                players = displayPlayers(socketData.players)
+            }
+        })
+
+        socket?.on("join-error", (msg) => {
+			goto(`/secret-santa/room/${page.params.room}/player/create?${msg}`)
+		});
+
+        const handleLeave = () => {
+            socket?.emit("leave-room", {
+                roomCode: page.params.room
+            });
+        };
+
+        socket?.emit("join-room", { 
+            roomCode: page.params.room,
+            name: player.name
+        })
+
+        return () => handleLeave();
+    })
 </script>
 
 <Page
@@ -25,7 +69,11 @@
 >
     {#snippet body()}
         <Table 
-            headers={["Name", "Ready"]}
+            headers={[
+                {display: "Name", value: "name"}, 
+                {display: "Ready", value: "ready"}, 
+                {display: "Host", value: "host"}
+            ]}
             body={players}
             backgroundColor={styles.backgroundColor}
             color={styles.color}

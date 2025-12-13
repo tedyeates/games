@@ -1,9 +1,14 @@
-import { getRoom } from "$lib/server/rooms"
-import type { RequestEvent } from "@sveltejs/kit"
+import { redirect, type RequestEvent } from "@sveltejs/kit"
 
-export const load = ({ params, cookies }: RequestEvent) => {
+export const load = async ({ params, cookies }: RequestEvent) => {
+    console.log("hello")
+    const playerCookie = cookies.get("player");
+    console.log(playerCookie)
+    if (!playerCookie) {
+        throw redirect(302, `/secret-santa/room/${params.room}/player/create`);
+    }
+
     return {
-        room: getRoom(params.room as string),
-        player: cookies.get("player")
+        player: playerCookie
     }
 }

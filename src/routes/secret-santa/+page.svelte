@@ -3,13 +3,14 @@
     import Button from "$lib/components/Button.svelte";
 	import { goto } from "$app/navigation";
     import { styles } from "$lib/style/themes"
+    import { PUBLIC_EXPRESS_BASE } from '$env/static/public';
 
     let loading = $state(false)
     let joinLoading = $state(false)
 
     async function createRoom() {
         loading = true
-        const response = await fetch("/api/room/create", {
+        const response = await fetch(`${PUBLIC_EXPRESS_BASE}/api/room/create`, {
             method: "POST"
         })
         const data = await response.json()
