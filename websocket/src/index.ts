@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { addPlayer, getRoom, createRoom, removePlayer, addPlayerData } from "./room";
+import { addPlayer, getRoom, createRoom, removePlayer, addPlayerData, createRounds } from "./room";
 
 dotenv.config();
 
@@ -128,8 +128,12 @@ app.post("/api/room/:room/player/create", (req, res) => {
 });
 
 app.post("/api/room/create", async (req,res) => {
-    console.log("hello")
     const room = await createRoom()
+    if (!room) return res.status(500).send({message: "Failed to create room"})
+
+    const rounds = await createRounds(room, 6)
+    if (!rounds) return res.status(500).send({message: "Failed to create rounds"})
+        
     res.status(200).json({ success: true, room })
 })
 
